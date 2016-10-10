@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void CargarImagen(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("image/jpeg");
+        i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(i,"Seleccione imagen"),PICK_IMAGE_REQUEST);
     }
@@ -95,21 +95,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == PICK_IMAGE_REQUEST){
             if(resultCode == RESULT_OK){
-                String ruta = data.getDataString().toString();
-                Uri uri = data.getData();
-                String mime = getContentResolver().getType(uri);
 
+                Uri uri = data.getData();
                 try{
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
                     iv_imagen.setImageBitmap(bitmap);
-                    iv_imagen.setImageURI(uri);
                     iv_imagen.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
                 }catch(Exception e){
                     Log.e("Mensaje","ocurrio un error");
+                    Toast.makeText(getApplicationContext(), "Ocurrio un error mostrando imagen",Toast.LENGTH_SHORT).show();
                 }
 
             }else{
-                Log.e("Mensaje","cancelado por el usuario");
+                Toast.makeText(getApplicationContext(), "Ocurrio un error con la carga",Toast.LENGTH_SHORT).show();
             }
 
         }
